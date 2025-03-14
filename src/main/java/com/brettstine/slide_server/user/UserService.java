@@ -2,6 +2,7 @@ package com.brettstine.slide_server.user;
 
 import java.util.Optional;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +24,27 @@ public class UserService {
             .password(passwordEncoder.encode(request.getPassword()))
             .role(Role.USER)
             .build();
-        return repository.save(user);
+        try {
+            return repository.save(user);
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Username or email already exists");
+        }
     }
 
     public Optional<User> findByUsername(String username) {
         return repository.findByUsername(username);
     }
 
+    public Optional<User> findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
     public boolean isUsernameAvailable(String username) {
         return !repository.existsByUsername(username);
+    }
+
+    public boolean isEmailAvailable(String email) {
+        return !repository.existsByEmail(email);
     }
 }
 

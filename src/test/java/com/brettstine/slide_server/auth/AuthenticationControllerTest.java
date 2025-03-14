@@ -27,7 +27,7 @@ public class AuthenticationControllerTest {
         String jsonRequest = "{\"username\":\"testUsername\",\"email\":\"test.email@gmail.com\",\"password\":\"password\"}";
 
         // Mocking the response of the AuthenticationService
-        AuthenticationResponse mockResponse = new AuthenticationResponse("mockedJwtToken");
+        AuthenticationResponse mockResponse = new AuthenticationResponse("mockedJwtToken", null);
         when(authenticationService.register(new RegisterRequest("testUsername", "test.email@gmail.com", "password")))
                 .thenReturn(mockResponse);
 

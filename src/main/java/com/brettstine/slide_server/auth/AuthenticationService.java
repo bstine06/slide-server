@@ -3,6 +3,7 @@ package com.brettstine.slide_server.auth;
 import com.brettstine.slide_server.config.JwtService;
 import com.brettstine.slide_server.user.User;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,7 @@ public class AuthenticationService {
         System.out.println("Authentication successful for user: " + request.getUsername());
 
         User user = userService.findByUsername(request.getUsername())
+            .or(() -> userService.findByEmail(request.getUsername())) //user may pass email instead
             .orElseThrow();
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
