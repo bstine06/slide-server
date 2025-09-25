@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf
                         .disable())
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/user/check/**") //whitelist
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/user/check/**", "/ws/**") //whitelist
                         .permitAll()
                         .anyRequest()
                         .authenticated())
@@ -53,7 +53,7 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(frontendUrl)); // Allow frontend origin
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 

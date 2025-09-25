@@ -2,6 +2,7 @@ package com.brettstine.slide_server.user;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,6 +44,9 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role; 
+
+    @Column(nullable = true, columnDefinition = "UUID")
+    private UUID currentGameId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

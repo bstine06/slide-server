@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final String SECRET_KEY;
 
@@ -47,7 +51,7 @@ public class JwtService {
             .setClaims(extraClaims)
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // valid for 15 minutes
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 120)) // valid for 120 minutes
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
     }

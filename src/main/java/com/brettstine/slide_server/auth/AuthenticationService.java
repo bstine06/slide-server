@@ -1,8 +1,11 @@
 package com.brettstine.slide_server.auth;
 
+import com.brettstine.slide_server.config.JwtAuthenticationFilter;
 import com.brettstine.slide_server.config.JwtService;
 import com.brettstine.slide_server.user.User;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final UserService userService;
     private final JwtService jwtService;
@@ -29,7 +34,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        System.out.println("Authentication request received for user: " + request.getUsername());
+        logger.info("Authentication request received for user {}", request.getUsername());
 
         try {
             authenticationManager.authenticate(
@@ -38,13 +43,11 @@ public class AuthenticationService {
                     request.getPassword()
                 )
             );
-            System.out.println("Authentication successful for user: " + request.getUsername());
+            logger.info("Authentication successful for user: {}", request.getUsername());
         } catch (Exception e) {
-            System.out.println("Authentication failed: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+            logger.info("Authentication failed: {}", (e.getClass().getSimpleName() + " - " + e.getMessage()));
             throw e;
         }
-
-        System.out.println("Authentication successful for user: " + request.getUsername());
 
         User user = userService.findByUsername(request.getUsername())
             .or(() -> userService.findByEmail(request.getUsername())) //user may pass email instead
