@@ -17,6 +17,7 @@ public class PlayerDto {
     private Direction nextMove;
     private int stopX;
     private int stopY;
+    private String color;
 
     public static PlayerDto convertToDto(Player player) {
         PlayerDto dto = PlayerDto.builder()
@@ -25,6 +26,12 @@ public class PlayerDto {
                             .level(player.getLevel())
                             .x(player.getX())
                             .y(player.getY())
+                            .vx(player.getVx())
+                            .vy(player.getVy())
+                            .nextMove(player.getNextMove())
+                            .stopX(player.getStopX())
+                            .stopY(player.getStopY())
+                            .color(player.getColor())
                             .build();
         return dto;
     }

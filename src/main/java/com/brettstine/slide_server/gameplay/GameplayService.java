@@ -62,7 +62,7 @@ public class GameplayService {
         );
     }
 
-    public void updatePlayer(UUID gameId, String username, PlayerUpdatePayload payload) {
+    public void updatePlayer(UUID gameId, String username, PlayerUpdatePayload payload) { 
         validateUsername(username, payload.getUsername());
 
         Game game = getGame(gameId);
@@ -78,7 +78,7 @@ public class GameplayService {
 
         repository.save(game);
 
-        broadcaster.broadcast(gameId, 
+        broadcaster.broadcastToGameExcept(gameId, username,
             new WebSocketMessage<>(GameWebSocketMessageTypes.PLAYER_UPDATE, payload, System.currentTimeMillis())
         );
     }

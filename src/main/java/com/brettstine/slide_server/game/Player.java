@@ -26,5 +26,7 @@ public class Player {
     private Integer stopX = null;
     @Builder.Default
     private Integer stopY = null;
+    @Builder.Default
+    private String color = "#FF0000";
 
 }

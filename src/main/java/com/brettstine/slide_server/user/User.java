@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.Check;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,6 +45,10 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role; 
+
+    @Column(nullable = false, length = 7)
+    @Check(constraints = "color ~ '^#[0-9A-F]{6}$'")
+    private String color;
 
     @Column(nullable = true, columnDefinition = "UUID")
     private UUID currentGameId;

@@ -21,5 +21,4 @@ public class PlayerUpdatePayload {
     private Direction nextMove;
     private int stopX;
     private int stopY;
-
 }

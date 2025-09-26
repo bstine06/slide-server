@@ -18,6 +18,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 
 import com.brettstine.slide_server.user.User;
+import com.brettstine.slide_server.user.UserProfileService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +28,7 @@ public class GameService {
     
     private final GameRepository repository;
     private final UserService userService;
+    private final UserProfileService userProfileService;
     private final GameBroadcaster gameBroadcaster;
 
     /*
@@ -90,8 +92,12 @@ public class GameService {
     }
 
     private Player createPlayerFromUsername(String username) {
+        // get player's custom details from db (color, etc)
+        String color = userProfileService.getUserProfile(username).getColor();
+
         return Player.builder()
                 .username(username)
+                .color(color)
                 .build();
     }
 

@@ -47,6 +47,22 @@ public class GameBroadcaster {
         });
     }
 
+    public void broadcastToGameExcept(UUID gameId, String excludedUsername, WebSocketMessage<?> message) {
+        Map<String, WebSocketSession> sessions = gameSessions.get(gameId);
+        if (sessions == null) return;
+
+        sessions.forEach((username, session) -> {
+            if (!username.equals(excludedUsername)) {
+                try {
+                    String json = objectMapper.writeValueAsString(message);
+                    session.sendMessage(new TextMessage(json));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     public void sendTo(UUID gameId, String username, WebSocketMessage<?> message) {
         Map<String, WebSocketSession> sessions = gameSessions.get(gameId);
         if (sessions == null) return;

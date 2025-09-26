@@ -17,6 +17,7 @@ import com.brettstine.slide_server.config.JwtAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
@@ -84,6 +85,28 @@ public class UserController {
         UserProfileResponse response = userProfileService.getUserProfile(username);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{username}/color")
+    public ResponseEntity<UserProfileResponse> updateUserColor(
+            @PathVariable("username") String username,
+            @RequestBody Map<String, String> payload, 
+            Authentication authentication
+        ) {
+
+        String authenticatedUsername = authentication.getName();
+
+        // Delegate the authorization check to the service
+        if (!userProfileService.isAuthorizedToAccessProfile(authenticatedUsername, username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // Update the user profile with the new information
+        String hex = payload.get("color");
+        UserProfileResponse response = userProfileService.updateUserColor(authenticatedUsername, hex);
+
+        return ResponseEntity.ok(response);
+
     }
     
 

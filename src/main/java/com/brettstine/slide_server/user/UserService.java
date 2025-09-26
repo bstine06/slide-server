@@ -27,6 +27,7 @@ public class UserService {
             .username(request.getUsername())
             .email(request.getEmail().toLowerCase().trim())
             .password(passwordEncoder.encode(request.getPassword()))
+            .color("#FF0000")
             .role(Role.USER)
             .build();
         try {

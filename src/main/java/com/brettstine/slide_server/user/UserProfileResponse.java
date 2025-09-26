@@ -16,5 +16,6 @@ public class UserProfileResponse {
     private String username;
     private String email;
     private UUID currentGameId;
+    private String color;
 
 }
