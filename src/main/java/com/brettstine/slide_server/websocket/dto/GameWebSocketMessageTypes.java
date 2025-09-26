@@ -8,6 +8,7 @@ public enum GameWebSocketMessageTypes {
     GAME_START,
     PLAYER_UPDATE,
     ERROR, 
-    PLAYER_JOIN
+    PLAYER_JOIN,
+    GAME_END
 
 }

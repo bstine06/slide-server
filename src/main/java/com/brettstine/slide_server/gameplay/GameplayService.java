@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import com.brettstine.slide_server.game.Game;
 import com.brettstine.slide_server.game.GameDto;
+import com.brettstine.slide_server.game.GamePhase;
 import com.brettstine.slide_server.game.GameRepository;
 import com.brettstine.slide_server.game.Player;
 import com.brettstine.slide_server.websocket.GameBroadcaster;
@@ -37,6 +38,8 @@ public class GameplayService {
 
         Game game = getGame(gameId);
         Player player = getPlayer(game, username);
+        player.setX(game.getMazes().get(0).getStartX());
+        player.setY(game.getMazes().get(0).getStartY());
         player.setReady(payload.isReady());
         repository.save(game);
 
@@ -54,6 +57,12 @@ public class GameplayService {
         Game game = getGame(gameId);
         if (game.getPlayers().remove(username) == null) {
             throw new IllegalArgumentException("Player not found in game");
+        }
+
+        //if no ones left, destroy the game
+        if (game.getPlayers().isEmpty()) {
+            repository.delete(game);
+            return;
         }
         repository.save(game);
 
@@ -76,11 +85,18 @@ public class GameplayService {
         player.setStopX(payload.getStopX());
         player.setStopY(payload.getStopY());
 
-        repository.save(game);
-
-        broadcaster.broadcastToGameExcept(gameId, username,
-            new WebSocketMessage<>(GameWebSocketMessageTypes.PLAYER_UPDATE, payload, System.currentTimeMillis())
-        );
+        if (player.getLevel() >= game.getMazes().size() - 1) {
+            game.setPhase(GamePhase.POST_GAME);
+            repository.save(game);
+            broadcaster.broadcast(gameId, 
+                new WebSocketMessage<>(GameWebSocketMessageTypes.GAME_END, GameDto.convertToDto(game), System.currentTimeMillis())
+            );
+        } else {
+            repository.save(game);
+            broadcaster.broadcastToGameExcept(gameId, username,
+                new WebSocketMessage<>(GameWebSocketMessageTypes.PLAYER_UPDATE, payload, System.currentTimeMillis())
+            );
+        }
     }
 
     private void attemptStartGame(UUID gameId) {
@@ -95,7 +111,7 @@ public class GameplayService {
 
     private void startGame(UUID gameId) {
         Game game = getGame(gameId);
-        game.setInProgress(true);
+        game.setPhase(GamePhase.IN_PROGRESS);
         repository.save(game);
         broadcaster.broadcast(gameId, 
             new WebSocketMessage<>(

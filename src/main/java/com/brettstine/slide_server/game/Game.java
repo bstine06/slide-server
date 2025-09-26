@@ -20,7 +20,7 @@ public class Game {
 
     private UUID id;
     private User host;
-    private boolean inProgress;
+    private GamePhase phase = GamePhase.PRE_GAME;
     private Map<String, Player> players = new ConcurrentHashMap<>();
     private List<Maze> mazes;
 

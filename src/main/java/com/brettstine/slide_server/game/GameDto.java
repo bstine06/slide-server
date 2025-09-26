@@ -13,7 +13,7 @@ public class GameDto {
 
     private UUID gameId;
     private String hostUsername;
-    private boolean inProgress;
+    private GamePhase phase;
     private Map<String, Player> players;
     private List<Maze> mazes;
 
@@ -21,7 +21,7 @@ public class GameDto {
         GameDto dto = GameDto.builder()
                             .gameId(game.getId())
                             .hostUsername(game.getHost().getUsername())
-                            .inProgress(game.isInProgress())
+                            .phase(game.getPhase())
                             .players(game.getPlayers())
                             .mazes(game.getMazes())
                             .build();

@@ -15,8 +15,8 @@ public class PlayerDto {
     private float vx;
     private float vy;
     private Direction nextMove;
-    private int stopX;
-    private int stopY;
+    private Integer stopX;
+    private Integer stopY;
     private String color;
 
     public static PlayerDto convertToDto(Player player) {
