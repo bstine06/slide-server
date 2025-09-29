@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 @RestController
 @RequestMapping("/api/v1/game")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "${frontend.url}")
 public class GameController {
     
     private final GameService gameService;
