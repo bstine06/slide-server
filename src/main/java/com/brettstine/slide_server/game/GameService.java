@@ -135,14 +135,13 @@ public class GameService {
                             .orElseThrow(() -> new EntityNotFoundException("User not found"));
         UUID currentGameId = thisUser.getCurrentGameId();
         
-        if (currentGameId == null) throw new EntityNotFoundException("User has no current game");
+        if (currentGameId == null) return null;
 
         Game game = repository.findById(currentGameId).orElse(null);
 
         if (game == null) {
             thisUser.setCurrentGameId(null);
             userService.save(thisUser);
-            throw new EntityNotFoundException("User has no current game");
         }
 
         return GameDto.convertToDto(game);

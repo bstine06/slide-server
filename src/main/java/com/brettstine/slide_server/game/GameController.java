@@ -94,6 +94,13 @@ public class GameController {
 
         GameDto gameDto = gameService.getCurrentGameForUser(authenticatedUsername);
 
+        if (gameDto == null) {
+            String message = "No game found for user: " + authenticatedUsername;
+            ResponseDto<GameDto> response = new ResponseDto<GameDto>(message, gameDto);
+
+            return ResponseEntity.ok(response); 
+        }
+
         String message = "Linked game found with id: " + gameDto.getGameId();
         ResponseDto<GameDto> response = new ResponseDto<GameDto>(message, gameDto);
 
