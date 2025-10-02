@@ -82,6 +82,7 @@ public class GameplayService {
         player.setVx(payload.getVx());
         player.setVy(payload.getVy());
         player.setNextMove(payload.getNextMove());
+        player.setAngle(payload.getAngle());
         player.setStopX(payload.getStopX());
         player.setStopY(payload.getStopY());
 

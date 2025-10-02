@@ -23,6 +23,8 @@ public class Player {
     @Builder.Default
     private Direction nextMove = null;
     @Builder.Default
+    private Float angle = 0f;
+    @Builder.Default
     private Integer stopX = null;
     @Builder.Default
     private Integer stopY = null;

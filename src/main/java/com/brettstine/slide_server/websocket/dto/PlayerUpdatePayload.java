@@ -19,6 +19,7 @@ public class PlayerUpdatePayload {
     private float vx;
     private float vy;
     private Direction nextMove;
+    private float angle;
     private int stopX;
     private int stopY;
 }

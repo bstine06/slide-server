@@ -10,5 +10,6 @@ public class Maze {
     private int startY;
     private int finishX;
     private int finishY;
+    private MazeTheme theme;
 
 }

@@ -156,19 +156,26 @@ public class GameService {
     public GameDto removePlayerFromGame(UUID gameId, String authenticatedUsername) {
         Game game = repository.findById(gameId).orElseThrow(() -> new EntityNotFoundException("Game not found"));
 
-        // Atomically remove the player from the map
-        Player removedPlayer = game.getPlayers().remove(authenticatedUsername);
-        if (removedPlayer == null) {
-            throw new EntityNotFoundException("Player not found in the game");
-        }
-        repository.save(game);
-
         // Clear the user's current game reference
         userService.findByUsername(authenticatedUsername)
                 .ifPresent(user -> {
                     user.setCurrentGameId(null);
                     userService.save(user);
-                });
+        });
+
+        // Atomically remove the player from the map
+        Player removedPlayer = game.getPlayers().remove(authenticatedUsername);
+        if (removedPlayer == null) {
+            throw new EntityNotFoundException("Player not found in the game");
+        }
+
+        // If this is the last player in the game, delete the game and return early
+        if (game.getPlayers().isEmpty()) {
+            repository.delete(game);
+            GameDto.convertToDto(game);
+        } else {
+            repository.save(game);
+        }
 
         // broadcast the change to all users in the game
         gameBroadcaster.broadcast(

@@ -15,6 +15,7 @@ public class PlayerDto {
     private float vx;
     private float vy;
     private Direction nextMove;
+    private Float angle;
     private Integer stopX;
     private Integer stopY;
     private String color;
@@ -29,6 +30,7 @@ public class PlayerDto {
                             .vx(player.getVx())
                             .vy(player.getVy())
                             .nextMove(player.getNextMove())
+                            .angle(player.getAngle())
                             .stopX(player.getStopX())
                             .stopY(player.getStopY())
                             .color(player.getColor())
